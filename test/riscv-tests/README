@@ -1,27 +1,17 @@
-Copyright (c) 2012-2015, The Regents of the University of California (Regents).
-All Rights Reserved.
+# riscv-tests
 
-Redistribution and use in source and binary forms, with or without
-modification, are permitted provided that the following conditions are met:
-1. Redistributions of source code must retain the above copyright
-   notice, this list of conditions and the following disclaimer.
-2. Redistributions in binary form must reproduce the above copyright
-   notice, this list of conditions and the following disclaimer in the
-   documentation and/or other materials provided with the distribution.
-3. Neither the name of the Regents nor the
-   names of its contributors may be used to endorse or promote products
-   derived from this software without specific prior written permission.
+The tests in this directory were built from https://github.com/riscv-software-src/riscv-tests commit https://github.com/riscv-software-src/riscv-tests/commit/799d6e807fa1e5b71cc4dace9d75f264c4ff224c .
 
-IN NO EVENT SHALL REGENTS BE LIABLE TO ANY PARTY FOR DIRECT, INDIRECT,
-SPECIAL, INCIDENTAL, OR CONSEQUENTIAL DAMAGES, INCLUDING LOST PROFITS, ARISING
-OUT OF THE USE OF THIS SOFTWARE AND ITS DOCUMENTATION, EVEN IF REGENTS HAS
-BEEN ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+Toolchain from https://github.com/xpack-dev-tools/riscv-none-elf-gcc-xpack/releases/download/v14.2.0-3/xpack-riscv-none-elf-gcc-14.2.0-3-linux-x64.tar.gz
 
-REGENTS SPECIFICALLY DISCLAIMS ANY WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
-THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
-PURPOSE. THE SOFTWARE AND ACCOMPANYING DOCUMENTATION, IF ANY, PROVIDED
-HEREUNDER IS PROVIDED "AS IS". REGENTS HAS NO OBLIGATION TO PROVIDE
-MAINTENANCE, SUPPORT, UPDATES, ENHANCEMENTS, OR MODIFICATIONS.
+```bash
+$ git clone https://github.com/riscv/riscv-tests
+$ cd riscv-tests
+$ git submodule update --init --recursive
+$ autoconf
+$ ./configure --prefix=$RISCV/target
+$ make
+$ make install
+```
 
-The tests in this directory were built from
-https://github.com/riscv/riscv-tools commit 84e9d5bf515908d15215cd8ee5b5beb6f7519491 .
+Modify makefiles if needed. Only ISA is in the folder.
