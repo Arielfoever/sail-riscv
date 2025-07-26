@@ -100,6 +100,7 @@ void set_config_print(char *var, bool val)
 struct timeval init_start, init_end, run_end;
 uint64_t total_insns = 0;
 uint64_t insn_limit = 0;
+uint64_t load_offset = 0;
 #ifdef SAILCOV
 char *sailcov_file = NULL;
 #endif
@@ -128,7 +129,8 @@ static struct option options[] = {
 #endif
     {"print-device-tree",              no_argument,       0, OPT_PRINT_DTS      },
     {"print-isa-string",               no_argument,       0, OPT_PRINT_ISA      },
-    {0,                                0,                 0, 0                  }
+    {0,                                0,                 0, 0                  },
+    {"dynamic",                        required_argument, 0, 'd'                }
 };
 
 static void print_usage(const char *argv0, int ec)
@@ -244,7 +246,8 @@ static int process_args(int argc, char **argv)
                     "r:"
                     "V::"
                     "v::"
-                    "l:",
+                    "l:"
+                    "d:",
                     options, NULL);
     if (c == -1)
       break;
@@ -327,6 +330,23 @@ static int process_args(int argc, char **argv)
       insn_limit = val;
       break;
     }
+    case 'd': {
+      char *p;
+      unsigned long long val;
+      errno = 0;
+      val = strtoull(optarg, &p, 0);
+      if (*p != '\0' || val > UINT64_MAX
+          || (val == ULLONG_MAX && errno == ERANGE)) {
+        fprintf(stderr, "invalid load offset %s\n", optarg);
+        exit(EXIT_FAILURE);
+      }
+      load_offset = val;
+      fprintf(
+          stderr,
+          "will load Position-Independent Executable file with offset %llu.\n",
+          load_offset);
+      break;
+    }
     case OPT_ENABLE_EXPERIMENTAL_EXTENSIONS:
       fprintf(stderr, "enabling unratified extensions.\n");
       rv_enable_experimental_extensions = true;
@@ -385,7 +405,12 @@ uint64_t load_sail(char *f, bool main_file)
   bool is32bit;
   uint64_t entry;
   uint64_t begin_sig, end_sig;
-  load_elf(f, &is32bit, &entry);
+  if (load_offset) {
+    // dynamic load
+    load_elf_at_offset(f, true, load_offset, &is32bit, &entry);
+  } else {
+    load_elf(f, &is32bit, &entry);
+  }
   check_elf(is32bit);
   if (!main_file) {
     /* Don't scan for test-signature/htif symbols for additional ELF files. */
@@ -397,15 +422,17 @@ uint64_t load_sail(char *f, bool main_file)
     fprintf(stderr, "Unable to locate tohost symbol; disabling HTIF.\n");
     rv_enable_htif = false;
   } else {
-    fprintf(stdout, "HTIF located at 0x%0" PRIx64 "\n", rv_htif_tohost);
+    fprintf(stdout, "HTIF located at 0x%0" PRIx64 "\n",
+            load_offset + rv_htif_tohost);
   }
   /* locate test-signature locations if any */
   if (!lookup_sym(f, "begin_signature", &begin_sig)) {
-    fprintf(stdout, "begin_signature: 0x%0" PRIx64 "\n", begin_sig);
+    fprintf(stdout, "begin_signature: 0x%0" PRIx64 "\n",
+            load_offset + begin_sig);
     mem_sig_start = begin_sig;
   }
   if (!lookup_sym(f, "end_signature", &end_sig)) {
-    fprintf(stdout, "end_signature: 0x%0" PRIx64 "\n", end_sig);
+    fprintf(stdout, "end_signature: 0x%0" PRIx64 "\n", load_offset + end_sig);
     mem_sig_end = end_sig;
   }
   return entry;
