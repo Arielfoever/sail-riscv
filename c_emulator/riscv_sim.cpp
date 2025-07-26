@@ -53,7 +53,6 @@ char *dtb_file = NULL;
 unsigned char *dtb = NULL;
 size_t dtb_len = 0;
 std::optional<rvfi_handler> rvfi;
-
 char *sig_file = NULL;
 uint64_t mem_sig_start = 0;
 uint64_t mem_sig_end = 0;
@@ -343,7 +342,7 @@ static int process_args(int argc, char **argv)
       load_offset = val;
       fprintf(
           stderr,
-          "will load Position-Independent Executable file with offset %llu.\n",
+          "will load Position-Independent Executable file with offset %lu.\n",
           load_offset);
       break;
     }
@@ -422,17 +421,18 @@ uint64_t load_sail(char *f, bool main_file)
     fprintf(stderr, "Unable to locate tohost symbol; disabling HTIF.\n");
     rv_enable_htif = false;
   } else {
-    fprintf(stdout, "HTIF located at 0x%0" PRIx64 "\n",
-            load_offset + rv_htif_tohost);
+    rv_htif_tohost += load_offset;
+    fprintf(stdout, "HTIF located at 0x%0" PRIx64 "\n", rv_htif_tohost);
   }
   /* locate test-signature locations if any */
   if (!lookup_sym(f, "begin_signature", &begin_sig)) {
-    fprintf(stdout, "begin_signature: 0x%0" PRIx64 "\n",
-            load_offset + begin_sig);
+    begin_sig += load_offset;
+    fprintf(stdout, "begin_signature: 0x%0" PRIx64 "\n", begin_sig);
     mem_sig_start = begin_sig;
   }
   if (!lookup_sym(f, "end_signature", &end_sig)) {
-    fprintf(stdout, "end_signature: 0x%0" PRIx64 "\n", load_offset + end_sig);
+    end_sig += load_offset;
+    fprintf(stdout, "end_signature: 0x%0" PRIx64 "\n", end_sig);
     mem_sig_end = end_sig;
   }
   return entry;
