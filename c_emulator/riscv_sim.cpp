@@ -342,7 +342,8 @@ static int process_args(int argc, char **argv)
       load_offset = val;
       fprintf(
           stderr,
-          "will load Position-Independent Executable file with offset %lu.\n",
+          "will load Position-Independent Executable file with offset %" PRIu64
+          ".\n",
           load_offset);
       break;
     }
