@@ -569,6 +569,7 @@ int inner_main(int argc, char **argv)
   // Initialize the model.
   if (!config_file.empty()) {
     sail_config_set_file(config_file.c_str());
+    validate_config(config_file);
   } else {
     sail_config_set_string(DEFAULT_JSON);
   }
@@ -576,9 +577,6 @@ int inner_main(int argc, char **argv)
   init_sail_configured_types();
   model_init();
 
-  if (do_validate_config) {
-    validate_config(config_file);
-  }
   if (do_print_dts) {
     print_dts();
   }
