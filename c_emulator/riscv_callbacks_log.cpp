@@ -115,7 +115,8 @@ void log_callbacks::ptw_start_callback(
     CREATE(sail_string)(&str_pr);
     zaccessType_to_str(&str_ac, access_type);
     zprivLevel_to_str(&str_pr, privilege);
-    fprintf(trace_log, "PTW: Start, vpn=%ld, access_type=%s, privilege=%s", vpn,
+    fprintf(trace_log,
+            "PTW: Start, vpn=0x%" PRIx64 ", access_type=%s, privilege=%s", vpn,
             str_ac, str_pr);
     KILL(sail_string)(&str_ac);
     KILL(sail_string)(&str_pr);
@@ -126,7 +127,8 @@ void log_callbacks::ptw_step_callback(sail_int /*level*/, sbits pte_addr,
                                       uint64_t pte)
 {
   if (trace_log != nullptr && config_print_ptw) {
-    fprintf(trace_log, "PTW: Step, pte=%ld, pte_addr=0x%" PRIX64 "\n", pte,
+    fprintf(trace_log, "PTW: Step, pte=0x%" PRIX64 ", pte_addr=0x%" PRIX64 "\n",
+            pte, pte_addr.bits);
             pte_addr.bits);
   }
 }
@@ -134,7 +136,7 @@ void log_callbacks::ptw_step_callback(sail_int /*level*/, sbits pte_addr,
 void log_callbacks::ptw_success_callback(uint64_t final_ppn, sail_int /*level*/)
 {
   if (trace_log != nullptr && config_print_ptw) {
-    fprintf(trace_log, "PTW: Success, final_pnn=%" PRIx64, final_ppn);
+    fprintf(trace_log, "PTW: Success, final_pnn=0x%" PRIx64, final_ppn);
   }
 }
 
