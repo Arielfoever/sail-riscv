@@ -108,7 +108,7 @@ function pt_walk(
   // Read this-level PTE from mem (Step 2 of VATP)
   match read_pte(pte_addr, 2 ^ log_pte_size_bytes) {
     Err(_)  => {
-      ptw_fail_callback(PTW_Access(), level, bits_of(pte_addr));
+      ptw_fail_callback(PTW_No_Access(), level, bits_of(pte_addr));
       Err(PTW_No_Access(), ext_ptw)
     },
     Ok(pte) => {
