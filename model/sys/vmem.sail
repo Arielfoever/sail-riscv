@@ -151,7 +151,7 @@ function pt_walk(
           // Steps 6, 7 (TODO: shadow stack protection), 8 of VATP.
           match check_PTE_permission(ac, priv, mxr, do_sum, pte_flags, pte_ext, ext_ptw) {
             PTE_Check_Failure(ext_ptw, pte_failure) => {
-              ptw_fail_callback(ext_get_ptw_error(ext_ptw_fail), level, bits_of(pte_addr));
+              ptw_fail_callback(ext_get_ptw_error(pte_failure), level, bits_of(pte_addr));
               Err(ext_get_ptw_error(pte_failure), ext_ptw)
             },
             PTE_Check_Success(ext_ptw) => {
