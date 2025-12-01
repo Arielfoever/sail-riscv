@@ -129,7 +129,6 @@ void log_callbacks::ptw_step_callback(sail_int /*level*/, sbits pte_addr,
   if (trace_log != nullptr && config_print_ptw) {
     fprintf(trace_log, "PTW: Step, pte=0x%" PRIX64 ", pte_addr=0x%" PRIX64 "\n",
             pte, pte_addr.bits);
-            pte_addr.bits);
   }
 }
 
