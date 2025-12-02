@@ -135,7 +135,7 @@ void log_callbacks::ptw_step_callback(sail_int /*level*/, sbits pte_addr,
 void log_callbacks::ptw_success_callback(uint64_t final_ppn, sail_int /*level*/)
 {
   if (trace_log != nullptr && config_print_ptw) {
-    fprintf(trace_log, "PTW: Success, final_pnn=0x%" PRIx64, final_ppn);
+    fprintf(trace_log, "PTW: Success, final_ppn=0x%" PRIx64, final_ppn);
   }
 }
 
