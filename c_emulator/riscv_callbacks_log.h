@@ -27,9 +27,9 @@ public:
   void ptw_start_callback(uint64_t vpn,
                           struct zMemoryAccessTypezIuzK access_type,
                           enum zPrivilege privilege) override;
-  void ptw_step_callback(sail_int level, sbits pte_addr, uint64_t pte) override;
-  void ptw_success_callback(uint64_t final_ppn, sail_int level) override;
-  void ptw_fail_callback(struct zPTW_Error error_type, sail_int /*level*/,
+  void ptw_step_callback(int64_t level, sbits pte_addr, uint64_t pte) override;
+  void ptw_success_callback(uint64_t final_ppn, int64_t level) override;
+  void ptw_fail_callback(struct zPTW_Error error_type, int64_t /*level*/,
                          sbits pte_addr) override;
 
 private:

@@ -143,7 +143,7 @@ unit ptw_start_callback(uint64_t vpn, struct zMemoryAccessTypezIuzK access_type,
   return UNIT;
 }
 
-unit ptw_step_callback(sail_int level, sbits pte_addr, uint64_t pte)
+unit ptw_step_callback(int64_t level, sbits pte_addr, uint64_t pte)
 {
   for (auto c : callbacks) {
     c->ptw_step_callback(level, pte_addr, pte);
@@ -151,7 +151,7 @@ unit ptw_step_callback(sail_int level, sbits pte_addr, uint64_t pte)
   return UNIT;
 }
 
-unit ptw_success_callback(uint64_t final_ppn, sail_int level)
+unit ptw_success_callback(uint64_t final_ppn, int64_t level)
 {
   for (auto c : callbacks) {
     c->ptw_success_callback(final_ppn, level);
@@ -159,7 +159,7 @@ unit ptw_success_callback(uint64_t final_ppn, sail_int level)
   return UNIT;
 }
 
-unit ptw_fail_callback(struct zPTW_Error error_type, sail_int level,
+unit ptw_fail_callback(struct zPTW_Error error_type,int64_t level,
                        sbits pte_addr)
 {
   for (auto c : callbacks) {
