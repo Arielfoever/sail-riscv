@@ -159,7 +159,7 @@ unit ptw_success_callback(uint64_t final_ppn, int64_t level)
   return UNIT;
 }
 
-unit ptw_fail_callback(struct zPTW_Error error_type,int64_t level,
+unit ptw_fail_callback(struct zPTW_Error error_type, int64_t level,
                        sbits pte_addr)
 {
   for (auto c : callbacks) {
