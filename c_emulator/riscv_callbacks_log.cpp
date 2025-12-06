@@ -123,32 +123,32 @@ void log_callbacks::ptw_start_callback(
   }
 }
 
-void log_callbacks::ptw_step_callback(int64_t /*level*/, sbits pte_addr,
+void log_callbacks::ptw_step_callback(int64_t level, sbits pte_addr,
                                       uint64_t pte)
 {
   if (trace_log != nullptr && config_print_ptw) {
-    fprintf(trace_log, "PTW: Step, pte=0x%" PRIX64 ", pte_addr=0x%" PRIX64 "\n",
-            pte, pte_addr.bits);
+    fprintf(trace_log, "PTW: Step, level=%ld, pte=0x%" PRIX64 ", pte_addr=0x%" PRIX64 "\n",
+            level, pte, pte_addr.bits);
   }
 }
 
-void log_callbacks::ptw_success_callback(uint64_t final_ppn, int64_t /*level*/)
+void log_callbacks::ptw_success_callback(uint64_t final_ppn, int64_t level)
 {
   if (trace_log != nullptr && config_print_ptw) {
-    fprintf(trace_log, "PTW: Success, final_ppn=0x%" PRIx64, final_ppn);
+    fprintf(trace_log, "PTW: Success, final_ppn=0x%" PRIx64 ", level=%ld", final_ppn,level);
   }
 }
 
 void log_callbacks::ptw_fail_callback(struct zPTW_Error error_type,
-                                      int64_t /*level*/, sbits pte_addr)
+                                      int64_t level, sbits pte_addr)
 {
   // failed trace is always available
   if (trace_log != nullptr) {
     sail_string str_et;
     CREATE(sail_string)(&str_et);
     zptw_error_to_str(&str_et, error_type);
-    fprintf(trace_log, "PTW: failed, error=%s, pte_addr=0x%" PRIX64 "\n",
-            str_et, pte_addr.bits);
+    fprintf(trace_log, "PTW: failed, error=%s, level=%ld, pte_addr=0x%" PRIX64 "\n",
+            str_et, level,pte_addr.bits);
     KILL(sail_string)(&str_et);
   }
 }
